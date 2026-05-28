@@ -1,0 +1,11 @@
+.vercel
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.production
+.env.*.local
+*.log
+.DS_Store
+package-lock 2.json

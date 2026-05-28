@@ -1,0 +1,51 @@
+/* Neo IO Components Pack - alerts, tabs, search, switches, progress, navs, ribbons, charts placeholders */
+:root{
+	--comp-shadow: 0 12px 40px rgba(0,0,0,.55), 0 0 40px rgba(102,204,255,.08) inset;
+}
+/* Alerts */
+.io-alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--io-border);background:rgba(255,255,255,.04);box-shadow:var(--comp-shadow);color:var(--io-fg)}
+.io-alert.success{border-color:rgba(25,245,164,.3);background:rgba(25,245,164,.08)}
+.io-alert.warn{border-color:rgba(240,173,78,.35);background:rgba(240,173,78,.08)}
+.io-alert.error{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.08)}
+.io-alert .io-alert-title{font-weight:900}
+.io-alert .io-alert-body{color:var(--io-fg-soft);font-size:var(--io-font-sm)}
+
+/* Tabs */
+.io-tabs{display:flex;gap:12px;border-bottom:1px solid var(--io-border)}
+.io-tab{padding:8px 10px;color:var(--io-fg-soft);border-bottom:2px solid transparent;cursor:pointer}
+.io-tab.active{color:#fff;border-bottom-color:var(--io-accent)}
+.io-tab:hover{color:#fff}
+
+/* Search Bar */
+.io-search{display:flex;align-items:center;gap:8px;border:1px solid var(--io-border);background:rgba(255,255,255,.04);border-radius:999px;padding:8px 12px}
+.io-search input{border:0;background:transparent;outline:0;color:#fff;width:200px}
+.io-search .io-btn{border-radius:999px}
+
+/* Switch */
+.io-switch{position:relative;width:48px;height:26px;border-radius:999px;border:1px solid var(--io-border);background:rgba(255,255,255,.08);cursor:pointer;transition:all .2s ease}
+.io-switch .knob{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s ease}
+.io-switch.on{background:linear-gradient(135deg,var(--io-accent),var(--io-accent-2))}
+.io-switch.on .knob{left:24px;background:#000}
+
+/* Progress */
+.io-progress{height:10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--io-border);overflow:hidden}
+.io-progress .bar{height:100%;background:linear-gradient(90deg,var(--io-accent),var(--io-accent-2));box-shadow:var(--io-neon);width:0}
+
+/* Nav Pills */
+.io-nav{display:flex;gap:10px;flex-wrap:wrap}
+.io-pill{border:1px solid var(--io-border);border-radius:999px;padding:6px 10px;color:var(--io-fg-soft);cursor:pointer}
+.io-pill.active{border-color:var(--io-accent);color:#fff;background:rgba(102,204,255,.12)}
+
+/* Ribbons */
+.io-ribbon-top{position:absolute;top:10px;left:10px;border-radius:8px;padding:4px 10px;background:linear-gradient(135deg,var(--io-accent),var(--io-accent-2));color:#000;font-weight:900;box-shadow:var(--io-neon)}
+.io-ribbon-ai{background:linear-gradient(135deg,#00ffd9,#66ccff)}
+.io-ribbon-hot{background:linear-gradient(135deg,#ffb703,#fb5607)}
+
+/* Chart placeholders */
+.io-chart{height:160px;border:1px dashed var(--io-border);border-radius:12px;background:rgba(255,255,255,.02)}
+.io-spark{height:48px;border:1px dashed var(--io-border);border-radius:8px;background:rgba(255,255,255,.02)}
+
+/* CTA Banner */
+.io-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--io-border);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}
+.io-banner strong{color:var(--io-accent)}
+

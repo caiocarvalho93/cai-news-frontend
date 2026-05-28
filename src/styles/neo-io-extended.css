@@ -1,0 +1,517 @@
+/* Neo IO Extended Theme - large utility pack and component system (io.net-inspired) */
+/* ==========================================================================
+   0. Root tokens and color system
+   ========================================================================== */
+:root {
+	/* Core */
+	--io-bg: #0a0a0a;
+	--io-bg-elev: #101010;
+	--io-bg-panel: #121212;
+	--io-fg: #ffffff;
+	--io-fg-muted: #c8c8c8;
+	--io-fg-soft: #a0a0a0;
+	--io-border: #2a2a2a;
+	--io-border-strong: #3a3a3a;
+	--io-accent: #66ccff;
+	--io-accent-2: #00e5ff;
+	--io-accent-3: #00ffd9;
+	--io-warn: #f0ad4e;
+	--io-error: #ff6b6b;
+	--io-success: #19f5a4;
+	--io-info: #7ab8ff;
+
+	/* Radii */
+	--io-r-xs: 6px;
+	--io-r-sm: 8px;
+	--io-r-md: 12px;
+	--io-r-lg: 16px;
+	--io-r-xl: 20px;
+	--io-r-2xl: 28px;
+
+	/* Depth */
+	--io-elev-1: 0 6px 18px rgba(0,0,0,0.5);
+	--io-elev-2: 0 10px 30px rgba(0,0,0,0.55), 0 0 30px rgba(102,204,255,0.08) inset;
+	--io-neon: 0 0 24px rgba(102,204,255,0.25), 0 0 60px rgba(102,204,255,0.2);
+	--io-neon-strong: 0 0 40px rgba(102,204,255,0.35), 0 0 100px rgba(102,204,255,0.3);
+
+	/* Typography scale */
+	--io-font-xs: 11px;
+	--io-font-sm: 13px;
+	--io-font-md: 14px;
+	--io-font-lg: 16px;
+	--io-font-xl: 20px;
+	--io-font-2xl: 24px;
+	--io-font-3xl: 28px;
+	--io-font-4xl: 36px;
+	--io-font-5xl: 48px;
+
+	/* Spacing scale */
+	--io-s-0: 0;
+	--io-s-1: 2px;
+	--io-s-2: 4px;
+	--io-s-3: 6px;
+	--io-s-4: 8px;
+	--io-s-5: 10px;
+	--io-s-6: 12px;
+	--io-s-8: 16px;
+	--io-s-10: 20px;
+	--io-s-12: 24px;
+	--io-s-16: 32px;
+	--io-s-20: 40px;
+	--io-s-24: 48px;
+	--io-s-32: 64px;
+}
+
+/* ==========================================================================
+   1. Base and layout helpers
+   ========================================================================== */
+.io-container {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding-left: var(--io-s-12);
+	padding-right: var(--io-s-12);
+}
+.io-row { display: flex; gap: var(--io-s-10); flex-wrap: wrap; }
+.io-col { flex: 1 1 0; min-width: min(360px, 100%); }
+.io-full { width: 100%; }
+.io-center { display: flex; align-items: center; justify-content: center; }
+.io-space-between { display: flex; align-items: center; justify-content: space-between; }
+.io-left { text-align: left; }
+.io-right { text-align: right; }
+.io-grid {
+	display: grid;
+	grid-gap: var(--io-s-12);
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+.io-stack { display: grid; gap: var(--io-s-10); }
+
+/* Paddings / Margins (subset) */
+[class*="u-p-"] { box-sizing: border-box; }
+.u-p-0 { padding: 0; }
+.u-p-2 { padding: var(--io-s-2); }
+.u-p-4 { padding: var(--io-s-4); }
+.u-p-6 { padding: var(--io-s-6); }
+.u-p-8 { padding: var(--io-s-8); }
+.u-p-10 { padding: var(--io-s-10); }
+.u-p-12 { padding: var(--io-s-12); }
+.u-p-16 { padding: var(--io-s-16); }
+.u-p-20 { padding: var(--io-s-20); }
+.u-pt-8 { padding-top: var(--io-s-8); }
+.u-pb-8 { padding-bottom: var(--io-s-8); }
+.u-pl-8 { padding-left: var(--io-s-8); }
+.u-pr-8 { padding-right: var(--io-s-8); }
+.u-m-0 { margin: 0; }
+.u-mt-8 { margin-top: var(--io-s-8); }
+.u-mb-8 { margin-bottom: var(--io-s-8); }
+.u-mt-12 { margin-top: var(--io-s-12); }
+.u-mb-12 { margin-bottom: var(--io-s-12); }
+.u-mt-16 { margin-top: var(--io-s-16); }
+.u-mb-16 { margin-bottom: var(--io-s-16); }
+.u-gap-8 { gap: var(--io-s-8); }
+.u-gap-12 { gap: var(--io-s-12); }
+.u-gap-16 { gap: var(--io-s-16); }
+
+/* ==========================================================================
+   2. Backgrounds and surfaces
+   ========================================================================== */
+.bg-io { background: var(--io-bg); color: var(--io-fg); }
+.bg-elev { background: var(--io-bg-elev); }
+.bg-panel { background: var(--io-bg-panel); }
+.bg-io-glass {
+	background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+	backdrop-filter: blur(12px);
+	border: 1px solid var(--io-border);
+}
+.bg-neon {
+	background:
+		radial-gradient(240px 180px at 20% 20%, rgba(102,204,255,0.14), transparent 60%),
+		radial-gradient(300px 260px at 80% 70%, rgba(0,229,255,0.10), transparent 60%),
+		linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+}
+
+/* ==========================================================================
+   3. Cards, panels, and dividers
+   ========================================================================== */
+.io-card {
+	background: var(--io-bg-panel);
+	border: 1px solid var(--io-border);
+	border-radius: var(--io-r-md);
+	box-shadow: var(--io-elev-1);
+}
+.io-card:hover { box-shadow: var(--io-elev-2); }
+.io-divider {
+	height: 1px;
+	background: linear-gradient(90deg, transparent, var(--io-border), transparent);
+	border: 0;
+}
+.io-section {
+	border: 1px solid var(--io-border);
+	border-radius: var(--io-r-lg);
+	background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+}
+
+/* ==========================================================================
+   4. Buttons
+   ========================================================================== */
+.io-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 10px 14px;
+	border-radius: 10px;
+	border: 1px solid rgba(102,204,255,0.25);
+	background: linear-gradient(180deg, rgba(102,204,255,0.10), rgba(0,0,0,0.05));
+	color: var(--io-fg);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+.io-btn:hover { border-color: var(--io-accent); box-shadow: var(--io-neon); }
+.io-btn:active { transform: translateY(1px) scale(0.99); }
+.io-btn.primary {
+	background: linear-gradient(135deg, var(--io-accent), var(--io-accent-2));
+	border: 0;
+	color: #000;
+	font-weight: 900;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+}
+.io-btn.ghost {
+	background: transparent;
+	border-color: var(--io-border);
+}
+.io-btn.danger {
+	background: linear-gradient(135deg, #ff7070, #ff3b3b);
+	border: 0;
+	color: #000;
+}
+.io-btn.pill { border-radius: 999px; padding: 8px 14px; }
+
+/* ==========================================================================
+   5. Badges & chips
+   ========================================================================== */
+.io-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	border-radius: 999px;
+	padding: 3px 8px;
+	font-size: var(--io-font-sm);
+	border: 1px solid rgba(102,204,255,0.3);
+	background: rgba(102,204,255,0.12);
+	color: var(--io-fg);
+}
+.io-badge.success { border-color: rgba(25,245,164,0.3); background: rgba(25,245,164,0.12); }
+.io-badge.warn { border-color: rgba(240,173,78,0.3); background: rgba(240,173,78,0.12); }
+.io-badge.error { border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.12); }
+
+/* ==========================================================================
+   6. Tables (analytics look)
+   ========================================================================== */
+.io-table { width: 100%; border-collapse: collapse; }
+.io-table th {
+	text-align: left;
+	color: var(--io-fg-soft);
+	font-size: var(--io-font-sm);
+	padding: 12px 8px;
+	border-bottom: 1px solid var(--io-border);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+.io-table td {
+	padding: 14px 8px;
+	color: var(--io-fg);
+	border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.io-table tr:hover td {
+	background: rgba(255,255,255,0.03);
+}
+
+/* ==========================================================================
+   7. Forms & controls
+   ========================================================================== */
+.io-input, .io-select, .io-textarea {
+	width: 100%;
+	background: rgba(255,255,255,0.04);
+	border: 1px solid var(--io-border);
+	color: var(--io-fg);
+	padding: 10px 12px;
+	border-radius: var(--io-r-sm);
+	outline: none;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.io-input:focus, .io-select:focus, .io-textarea:focus {
+	border-color: var(--io-accent);
+	box-shadow: 0 0 0 2px rgba(102,204,255,0.15);
+}
+
+.io-range {
+	width: 100%;
+	accent-color: var(--io-accent);
+}
+
+/* ==========================================================================
+   8. Skeletons & loaders
+   ========================================================================== */
+.io-skeleton {
+	border-radius: 10px;
+	background: linear-gradient(90deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03), rgba(255,255,255,0.07));
+	background-size: 200% 100%;
+	animation: io-skeleton 1.2s infinite linear;
+}
+@keyframes io-skeleton {
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+.io-loader-ring {
+	width: 36px; height: 36px;
+	border: 3px solid rgba(255,255,255,0.2);
+	border-top-color: var(--io-accent);
+	border-radius: 50%;
+	animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ==========================================================================
+   9. Tooltips & tags
+   ========================================================================== */
+.io-tooltip {
+	position: relative;
+}
+.io-tooltip:hover::after {
+	content: attr(data-tip);
+	position: absolute;
+	left: 50%; top: -36px;
+	transform: translateX(-50%);
+	background: rgba(10,10,10,0.95);
+	border: 1px solid var(--io-border);
+	color: var(--io-fg);
+	padding: 6px 8px;
+	border-radius: 8px;
+	font-size: var(--io-font-sm);
+	white-space: nowrap;
+	box-shadow: var(--io-elev-1);
+}
+.io-tag { display:inline-block; padding: 4px 8px; border:1px solid var(--io-border); border-radius:999px; color:var(--io-fg-soft); }
+
+/* ==========================================================================
+   10. Hero & banners
+   ========================================================================== */
+.io-hero {
+	position: relative;
+	padding: var(--io-s-24);
+	border-radius: var(--io-r-xl);
+	border: 1px solid var(--io-border);
+	background:
+		radial-gradient(300px 200px at 15% 30%, rgba(102,204,255,0.15), transparent 65%),
+		radial-gradient(360px 260px at 85% 70%, rgba(0,229,255,0.10), transparent 65%),
+		linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+	box-shadow: var(--io-neon);
+}
+.io-hero .io-title {
+	font-size: var(--io-font-4xl);
+	font-weight: 900;
+	background: linear-gradient(90deg, var(--io-accent), var(--io-accent-2));
+	-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+	margin-bottom: var(--io-s-10);
+}
+.io-hero .io-subtitle {
+	color: var(--io-fg-soft);
+	font-size: var(--io-font-lg);
+}
+
+/* ==========================================================================
+   11. Animations & effects
+   ========================================================================== */
+.fx-float { animation: fx-float 6s ease-in-out infinite; }
+@keyframes fx-float {
+	0% { transform: translateY(0px); }
+	50% { transform: translateY(-6px); }
+	100% { transform: translateY(0px); }
+}
+.fx-glow { box-shadow: var(--io-neon); }
+.fx-glow-strong { box-shadow: var(--io-neon-strong); }
+.fx-scanline::after {
+	content: "";
+	position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+	background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 60%);
+	mix-blend-mode: screen;
+	pointer-events: none;
+}
+.fx-sweep-border {
+	position: relative;
+}
+.fx-sweep-border::before {
+	content: "";
+	position: absolute; inset: 0;
+	border-radius: inherit;
+	padding: 1px;
+	background: linear-gradient(135deg, rgba(102,204,255,0.35), rgba(102,204,255,0.05));
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor; mask-composite: exclude;
+}
+.fx-pan-bg {
+	background-size: 200% 200%;
+	animation: pan-bg 8s ease-in-out infinite;
+}
+@keyframes pan-bg {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================================
+   12. Lists and model cards (io-like)
+   ========================================================================== */
+.io-model-card {
+	display: grid;
+	grid-template-columns: 56px 1fr auto;
+	gap: var(--io-s-10);
+	align-items: center;
+	padding: var(--io-s-12);
+	border: 1px solid var(--io-border);
+	border-radius: var(--io-r-md);
+	background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+}
+.io-model-card:hover { border-color: var(--io-accent); box-shadow: var(--io-neon); }
+.io-model-icon {
+	width: 56px; height: 56px;
+	border-radius: 12px;
+	border: 1px solid var(--io-border);
+	background:
+		radial-gradient(140px 100px at 30% 20%, rgba(102,204,255,0.18), transparent 60%),
+		radial-gradient(160px 120px at 70% 80%, rgba(0,229,255,0.12), transparent 60%),
+		rgba(255,255,255,0.02);
+}
+.io-model-meta { color: var(--io-fg-soft); font-size: var(--io-font-sm); }
+.io-model-title { font-weight: 900; }
+
+/* ==========================================================================
+   13. Overlays & modals
+   ========================================================================== */
+.io-overlay {
+	position: fixed; inset: 0; z-index: 9999;
+	background: rgba(0,0,0,0.6);
+	display: flex; align-items: center; justify-content: center;
+	backdrop-filter: blur(8px);
+}
+.io-modal {
+	width: min(92vw, 760px);
+	border-radius: var(--io-r-lg);
+	background: var(--io-bg-panel);
+	border: 1px solid var(--io-border);
+	box-shadow: var(--io-elev-2);
+}
+.io-modal-header { padding: var(--io-s-12) var(--io-s-16); border-bottom: 1px solid var(--io-border); }
+.io-modal-body { padding: var(--io-s-16); }
+.io-modal-footer { padding: var(--io-s-12) var(--io-s-16); border-top: 1px solid var(--io-border); display: flex; gap: var(--io-s-8); justify-content: flex-end; }
+
+/* ==========================================================================
+   14. Ribbons & status tags
+   ========================================================================== */
+.io-ribbon {
+	position: absolute; top: 10px; left: -8px;
+	padding: 4px 10px;
+	font-size: var(--io-font-sm);
+	background: linear-gradient(135deg, var(--io-accent), var(--io-accent-2));
+	color: #000;
+	font-weight: 900;
+	border-radius: 6px;
+	box-shadow: var(--io-neon);
+}
+
+/* ==========================================================================
+   15. Utility text colors and sizes
+   ========================================================================== */
+.t-xs { font-size: var(--io-font-xs); }
+.t-sm { font-size: var(--io-font-sm); }
+.t-md { font-size: var(--io-font-md); }
+.t-lg { font-size: var(--io-font-lg); }
+.t-xl { font-size: var(--io-font-xl); }
+.t-2xl { font-size: var(--io-font-2xl); }
+.t-3xl { font-size: var(--io-font-3xl); }
+.t-4xl { font-size: var(--io-font-4xl); }
+.text-muted { color: var(--io-fg-soft) !important; }
+.text-accent { color: var(--io-accent) !important; }
+.text-success { color: var(--io-success) !important; }
+.text-warn { color: var(--io-warn) !important; }
+.text-error { color: var(--io-error) !important; }
+
+/* ==========================================================================
+   16. Shadows & borders
+   ========================================================================== */
+.shadow-io-1 { box-shadow: var(--io-elev-1); }
+.shadow-io-2 { box-shadow: var(--io-elev-2); }
+.border-io { border: 1px solid var(--io-border); }
+.border-io-strong { border: 1px solid var(--io-border-strong); }
+.rounded-xs { border-radius: var(--io-r-xs); }
+.rounded-sm { border-radius: var(--io-r-sm); }
+.rounded-md { border-radius: var(--io-r-md); }
+.rounded-lg { border-radius: var(--io-r-lg); }
+.rounded-xl { border-radius: var(--io-r-xl); }
+.rounded-2xl { border-radius: var(--io-r-2xl); }
+
+/* ==========================================================================
+   17. Hero backgrounds and scanline
+   ========================================================================== */
+.io-bg-grid {
+	background-image:
+		linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+	background-size: 28px 28px, 28px 28px;
+	background-position: -1px -1px, -1px -1px;
+}
+.io-scan-wall {
+	position: relative;
+	overflow: hidden;
+}
+.io-scan-wall::after {
+	content: "";
+	position: absolute;
+	left: -20%; right: -20%; top: -10%;
+	height: 30%;
+	background: linear-gradient(180deg, rgba(102,204,255,0.15), transparent);
+	filter: blur(10px);
+	transform: translateY(-100%);
+	animation: io-scan 6s ease-in-out infinite;
+}
+@keyframes io-scan {
+	0%, 100% { transform: translateY(-100%); }
+	50% { transform: translateY(300%); }
+}
+
+/* ==========================================================================
+   18. Link styles
+   ========================================================================== */
+.io-link {
+	color: var(--io-accent);
+	text-decoration: none;
+	border-bottom: 1px dotted rgba(102,204,255,0.6);
+}
+.io-link:hover { color: var(--io-accent-2); border-bottom-color: var(--io-accent-2); }
+
+/* ==========================================================================
+   19. Footer badges
+   ========================================================================== */
+.io-footer {
+	padding: var(--io-s-16);
+	border-top: 1px solid var(--io-border);
+	color: var(--io-fg-soft);
+}
+.io-footer .badges { display: flex; gap: var(--io-s-8); flex-wrap: wrap; }
+
+/* ==========================================================================
+   20. CTA stripes
+   ========================================================================== */
+.io-cta {
+	padding: var(--io-s-16);
+	border: 1px solid var(--io-border);
+	border-radius: var(--io-r-lg);
+	background:
+		linear-gradient(135deg, rgba(102,204,255,0.10), rgba(102,204,255,0.02)),
+		radial-gradient(280px 220px at 10% 10%, rgba(102,204,255,0.15), transparent 60%),
+		radial-gradient(320px 240px at 90% 80%, rgba(0,229,255,0.10), transparent 60%);
+}
+.io-cta strong { color: var(--io-accent); }
+
+

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { apiCall } from "../config/api";
 import { useLanguage } from "../contexts/LanguageContext";
 import TranslatedText from "./TranslatedText";
-import METABreakthroughButton from "./METABreakthroughButton";
 import DashboardJobSearch from "./DashboardJobSearch";
 
 const TOP_COUNTRIES = [
@@ -469,24 +468,6 @@ export default function Dashboard() {
           >
             🌍 <TranslatedText>Free Translation API</TranslatedText>
           </Link>
-        </motion.div>
-
-        {/* META BREAKTHROUGH SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="text-center mb-8"
-        >
-          <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 backdrop-blur-sm border border-yellow-400/30 rounded-3xl p-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent mb-4">
-              🚀 META BREAKTHROUGH ZONE
-            </h2>
-            <p className="text-gray-300 text-lg mb-6">
-              Revolutionary AI algorithms that surpass Meta, Google, OpenAI
-            </p>
-            <METABreakthroughButton />
-          </div>
         </motion.div>
 
         <motion.div

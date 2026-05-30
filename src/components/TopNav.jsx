@@ -148,7 +148,7 @@ export default function TopNav() {
 						<TranslatedText>News</TranslatedText>
 					</NavLink>
 					<NavLink
-						to="/ai-leaderboard"
+						to="/arena"
 						className="nav-link"
 						style={({ isActive }) => ({
 							color: isActive ? "#fff" : "var(--muted-foreground)",
@@ -157,7 +157,7 @@ export default function TopNav() {
 							textDecoration: "none",
 						})}
 					>
-						<TranslatedText>AI Leaderboard</TranslatedText>
+						🏟️ <TranslatedText>Arena</TranslatedText>
 					</NavLink>
 					{isMember && (
 						<NavLink

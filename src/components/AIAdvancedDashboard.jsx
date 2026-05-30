@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_BASE from "../config/api";
 import { 
   TrendingUp, 
   Brain, 
@@ -35,7 +36,7 @@ const AIAdvancedDashboard = () => {
 
   const fetchAICapabilities = async () => {
     try {
-      const response = await fetch('/api/ai-advanced/capabilities');
+      const response = await fetch(`${API_BASE}/api/ai-advanced/capabilities`);
       const data = await response.json();
       if (data.success) {
         setCapabilities(data.capabilities);
@@ -72,7 +73,7 @@ const AIAdvancedDashboard = () => {
       ];
 
       // Use the existing intelligence endpoint instead
-      const response = await fetch('http://localhost:3000/api/intelligence/US');
+      const response = await fetch(`${API_BASE}/api/intelligence/US`);
       const intelligenceData = await response.json();
       
       // Transform intelligence data to match expected format
@@ -139,7 +140,7 @@ const AIAdvancedDashboard = () => {
         ]
       };
 
-      const response = await fetch('/api/ai-advanced/personalization/content', {
+      const response = await fetch(`${API_BASE}/api/ai-advanced/personalization/content`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

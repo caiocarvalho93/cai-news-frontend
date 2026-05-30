@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import TranslatedText from "./TranslatedText";
-import {
+import API_BASE, {
   getTourismData,
   getJobData,
   getWikipediaSummary,
@@ -389,7 +389,7 @@ Phase 3: Quantum Action Plan
         console.log(
           `🚀 Attempting to fetch from /api/intelligence/${countryCode}`
         );
-        const response = await fetch(`http://localhost:3000/api/intelligence/${countryCode}`);
+        const response = await fetch(`${API_BASE}/api/intelligence/${countryCode}`);
 
         if (response.ok) {
           const intelligenceData = await response.json();

@@ -1,5 +1,6 @@
 // 🌍 Language Context - Global translation state management
 import { createContext, useContext, useState, useEffect } from "react";
+import API_BASE from "../config/api";
 
 const LanguageContext = createContext();
 
@@ -179,16 +180,8 @@ export function LanguageProvider({ children }) {
     console.log("🌍 CurrentLanguage state changed to:", currentLanguage);
   }, [currentLanguage]);
 
-  // Get API base URL - RESTORED TO ORIGINAL
-  const getApiBase = () => {
-    if (
-      import.meta.env.PROD ||
-      window.location.hostname.includes("azurestaticapps.net")
-    ) {
-      return "https://cai-intelligence-backend.azurewebsites.net";
-    }
-    return "https://cai-intelligence-backend.azurewebsites.net";
-  };
+  // Get API base URL from the single source of truth (config/api.js).
+  const getApiBase = () => API_BASE;
 
   // Translate text with caching
   const translateText = async (text, targetLanguage = currentLanguage) => {

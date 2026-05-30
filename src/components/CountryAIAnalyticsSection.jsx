@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import TranslatedText from "./TranslatedText";
+import API_BASE from "../config/api";
 
 const CountryAIAnalyticsSection = ({ countryCode, countryName }) => {
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -33,7 +34,7 @@ const CountryAIAnalyticsSection = ({ countryCode, countryName }) => {
       
       console.log(`🔍 Fetching AI analytics for ${countryCode}...`);
       
-      const response = await fetch(`${import.meta.env.VITE_API_BASE || 'https://cai-intelligence-backend.azurewebsites.net'}/api/intelligence/${countryCode}`);
+      const response = await fetch(`${API_BASE}/api/intelligence/${countryCode}`);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

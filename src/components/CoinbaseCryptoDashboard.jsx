@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, BarChart3, Activity, Eye, Star, Zap } from 'lucide-react';
+import API_BASE from "../config/api";
 
 const CoinbaseCryptoDashboard = () => {
   const [cryptoData, setCryptoData] = useState([]);
@@ -19,7 +20,7 @@ const CoinbaseCryptoDashboard = () => {
   // Fetch real-time data from our revolutionary API
   const fetchRealTimeData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/crypto-treasury/comprehensive-trading-data');
+      const response = await fetch(`${API_BASE}/api/crypto-treasury/comprehensive-trading-data`);
       const data = await response.json();
       
       if (data.success && data.data.coinbaseData.market) {

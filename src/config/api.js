@@ -1,26 +1,31 @@
 /**
- * 🚨 API Configuration - Azure Backend
- * Centralized API base URL configuration
+ * 🔗 API Configuration — single source of truth for the backend base URL.
+ *
+ * Resolution order:
+ *   1. VITE_API_BASE / VITE_API_URL  (set in Vercel/Railway dashboards at build time)
+ *   2. localhost dev                 → http://localhost:3000
+ *   3. production with no env set     → same-origin (relative "/api/*")
+ *
+ * There is deliberately NO hardcoded production host: a stale/dead backend URL
+ * must never silently break the app. In production, set VITE_API_BASE to your
+ * live backend URL (e.g. the Railway deployment).
  */
-
-// EINSTEIN-LEVEL: Bulletproof environment detection
 const API_BASE = (() => {
-  // 1. Check for explicit environment variable (set during build)
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-  
-  if (import.meta.env.VITE_API_BASE) {
-    return import.meta.env.VITE_API_BASE;
+  // 1. Explicit build-time environment variable.
+  if (import.meta.env.VITE_API_BASE) return import.meta.env.VITE_API_BASE;
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+
+  // 2. Local development → local backend.
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "http://localhost:3000";
+    }
   }
 
-  // 2. Detect production environment (Azure backend)
-  if (import.meta.env.PROD || window.location.hostname.includes("azurestaticapps.net")) {
-    return "https://cai-intelligence-backend.azurewebsites.net";
-  }
-
-  // 3. Local development (pointing to Azure backend for testing)
-  return "https://cai-intelligence-backend.azurewebsites.net";
+  // 3. Production fallback → same-origin (relative requests). Configure
+  //    VITE_API_BASE in the hosting dashboard to point at the real backend.
+  return "";
 })();
 
 console.log("🔗 API Base URL:", API_BASE);

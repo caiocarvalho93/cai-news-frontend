@@ -1,17 +1,7 @@
-// API Configuration
-const config = {
-  development: {
-    apiUrl: '', // Uses proxy in development
-  },
-  production: {
-    apiUrl: 'https://cai-intelligence-backend.azurewebsites.net',
-  }
-};
+// API Configuration — re-exports the single source of truth (config/api.js).
+// Kept for backwards-compatibility with older imports.
+import API_BASE, { createApiUrl } from "./config/api.js";
 
-const environment = import.meta.env.MODE || 'development';
-export const API_BASE_URL = config[environment].apiUrl;
-
-// Helper function to build API URLs
-export function apiUrl(endpoint) {
-  return `${API_BASE_URL}${endpoint}`;
-}
+export const API_BASE_URL = API_BASE;
+export const apiUrl = createApiUrl;
+export default API_BASE;

@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_BASE from "../config/api";
 import { 
   Brain, 
   Zap, 
@@ -41,9 +42,7 @@ const AIUltimateDashboard = () => {
 
   const fetchSystemStatus = async () => {
     try {
-      const API_BASE = window.location.hostname.includes('localhost') 
-        ? 'http://localhost:3000' 
-        : 'https://website-project-ai-production.up.railway.app';
+      // API base resolved from canonical config/api.js (no dead hosts)
 
       const response = await fetch(`${API_BASE}/api/ai-advanced/capabilities`);
       
@@ -94,9 +93,7 @@ const AIUltimateDashboard = () => {
     setIsProcessing(true);
     try {
       // Use the working AI Ultimate API endpoint
-      const API_BASE = window.location.hostname.includes('localhost') 
-        ? 'http://localhost:3000' 
-        : 'https://website-project-ai-production.up.railway.app';
+      // API base resolved from canonical config/api.js (no dead hosts)
 
       // Test AI Optimization Metrics
       const response = await fetch(`${API_BASE}/api/ai-optimization/metrics`, {
@@ -240,9 +237,7 @@ const AIUltimateDashboard = () => {
         }
       };
 
-      const API_BASE = window.location.hostname.includes('localhost') 
-        ? 'http://localhost:3000' 
-        : 'https://website-project-ai-production.up.railway.app';
+      // API base resolved from canonical config/api.js (no dead hosts)
 
       const response = await fetch(`${API_BASE}/api/ai-optimization/news/enhance`, {
         method: 'POST',
@@ -279,9 +274,7 @@ const AIUltimateDashboard = () => {
   const runPerformanceBenchmark = async () => {
     setIsProcessing(true);
     try {
-      const API_BASE = window.location.hostname.includes('localhost') 
-        ? 'http://localhost:3000' 
-        : 'https://website-project-ai-production.up.railway.app';
+      // API base resolved from canonical config/api.js (no dead hosts)
 
       const response = await fetch(`${API_BASE}/api/ai-optimization/metrics`, {
         method: 'POST',

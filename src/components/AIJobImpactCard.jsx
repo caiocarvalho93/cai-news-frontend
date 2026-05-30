@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import TranslatedText from "./TranslatedText";
+import API_BASE from "../config/api";
 
 const AIJobImpactCard = () => {
   const [impactData, setImpactData] = useState(null);
@@ -33,7 +34,7 @@ const AIJobImpactCard = () => {
     try {
       setLoading(true);
       // Use the existing intelligence endpoint with US as default
-      const response = await fetch('http://localhost:3000/api/intelligence/US');
+      const response = await fetch(`${API_BASE}/api/intelligence/US`);
       const data = await response.json();
 
       if (data.success) {

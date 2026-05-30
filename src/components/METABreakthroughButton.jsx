@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Crown, Sparkles, Brain, Zap, Star, Rocket } from 'lucide-react';
+import API_BASE from "../config/api";
 
 const METABreakthroughButton = () => {
   const [isActivating, setIsActivating] = useState(false);
@@ -15,10 +16,7 @@ const METABreakthroughButton = () => {
   const activateMETABreakthrough = async () => {
     setIsActivating(true);
     try {
-      const API_BASE = window.location.hostname.includes('localhost') 
-        ? 'http://localhost:3000' 
-        : 'https://website-project-ai-production.up.railway.app';
-
+      // API base resolved from canonical config/api.js (no dead hosts)
       console.log('🚀 Activating META Breakthrough Intelligence...');
 
       // Step 1: Quantum Consciousness Processing

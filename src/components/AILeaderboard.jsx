@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import TranslatedText from "./TranslatedText";
 import CountryAIJobImpactPanel from "./CountryAIJobImpactPanel";
+import API_BASE from "../config/api";
 import {
   Brain,
   Cpu,
@@ -330,9 +331,7 @@ export default function AILeaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const apiUrl = import.meta.env.PROD
-          ? "https://website-project-ai-production.up.railway.app/api/ai-leaderboard"
-          : "/api/ai-leaderboard";
+        const apiUrl = `${API_BASE}/api/ai-leaderboard`;
 
         const response = await axios.get(apiUrl);
         setLeaderboard(response.data);

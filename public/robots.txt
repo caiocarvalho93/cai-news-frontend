@@ -1,0 +1,6 @@
+# cAI TechHub — https://website-project-ai.vercel.app
+# AI tech news · AI News Arena · weekly job discovery
+User-agent: *
+Allow: /
+
+Sitemap: https://website-project-ai.vercel.app/sitemap.xml

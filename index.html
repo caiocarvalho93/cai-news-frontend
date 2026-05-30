@@ -2,8 +2,66 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CIA ECONOMIC INTELLIGENCE NETWORK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#060a07" />
+
+    <title>cAI TechHub — AI Tech News, News Arena & Weekly Job Discovery</title>
+    <meta
+      name="description"
+      content="cAI TechHub — real-time AI & tech news, a country-by-country AI News Arena, and AI-enhanced weekly job discovery powered by Adzuna. Multilingual, installable, and offline-ready."
+    />
+    <meta
+      name="keywords"
+      content="AI news, tech news, AI jobs, job discovery, AI News Arena, country AI rankings, crypto treasury, translation API, cAI TechHub"
+    />
+    <meta name="author" content="Caio Carvalho" />
+    <meta name="application-name" content="cAI TechHub" />
+    <link rel="canonical" href="https://website-project-ai.vercel.app/" />
+
+    <!-- Favicons & app icons -->
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="alternate icon" sizes="48x48" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- PWA / installability -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="cAI TechHub" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="cAI TechHub" />
+    <meta
+      property="og:title"
+      content="cAI TechHub — AI Tech News, News Arena & Weekly Job Discovery"
+    />
+    <meta
+      property="og:description"
+      content="Real-time AI & tech news, a country-by-country AI News Arena, and AI-enhanced weekly job discovery. Multilingual, installable, and offline-ready."
+    />
+    <meta property="og:url" content="https://website-project-ai.vercel.app/" />
+    <meta property="og:image" content="https://website-project-ai.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="cAI TechHub — AI Tech News, News Arena & Jobs" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="cAI TechHub — AI Tech News, News Arena & Weekly Job Discovery"
+    />
+    <meta
+      name="twitter:description"
+      content="Real-time AI & tech news, a country-by-country AI News Arena, and AI-enhanced weekly job discovery."
+    />
+    <meta name="twitter:image" content="https://website-project-ai.vercel.app/og-image.png" />
+
     <style>
       body {
         margin: 0;
@@ -15,5 +73,27 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Register the service worker for installability + offline resilience.
+      // Network-first navigations mean users always get the freshest app shell.
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then(function (reg) {
+              reg.addEventListener("updatefound", function () {
+                var sw = reg.installing;
+                if (!sw) return;
+                sw.addEventListener("statechange", function () {
+                  if (sw.state === "installed" && navigator.serviceWorker.controller) {
+                    sw.postMessage("SKIP_WAITING");
+                  }
+                });
+              });
+            })
+            .catch(function () {});
+        });
+      }
+    </script>
   </body>
 </html>

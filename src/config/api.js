@@ -71,35 +71,20 @@ export async function apiCall(endpoint, options = {}) {
   }
 }
 
-// Tourism and Jobs API Integration
-const GEOAPIFY_KEY = "87fff072fd194da2ababf80ff62bc5e3"; // Updated location key
-const ALPHA_VANTAGE_KEY = "VQZ228GQKHENOZDD"; // For enhanced financial/market data
+// NOTE: third-party API keys (Geoapify, etc.) are intentionally NOT stored
+// client-side anymore. They are read from process.env on the backend and
+// proxied through /api/geo/* so the keys never ship in the browser bundle.
 
 /**
- * Get tourism attractions for a country using Geoapify
- * @param {string} countryBounds - Bounding box coordinates
- * @returns {Promise} Tourism data
+ * Get tourism attractions for a country via the backend Geoapify proxy.
+ * @param {string} countryBounds - Bounding box "lon1,lat1,lon2,lat2"
+ * @returns {Promise} Tourism data ({ features: [...] }, possibly degraded)
  */
 export async function getTourismData(countryBounds) {
   try {
-    // Enhanced categories for more comprehensive results
-    const categories = [
-      'tourism.attraction',
-      'tourism.sights',
-      'heritage.unesco',
-      'entertainment.museum',
-      'natural.beach',
-      'building.historic'
-    ].join(',');
-    
-    const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=rect:${countryBounds}&limit=15&apiKey=${GEOAPIFY_KEY}`;
-    console.log('🏛️ Fetching enhanced tourism data:', url);
-    
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Tourism API error: ${response.status}`);
-    
-    const data = await response.json();
-    
+    // Proxied server-side: the API key stays on the backend (no key in bundle).
+    const data = await apiCall(`/api/geo/tourism?bounds=${encodeURIComponent(countryBounds)}`);
+
     // Enhance the data with better categorization
     if (data.features) {
       data.features = data.features.map(feature => ({
@@ -168,163 +153,65 @@ function getAttractionPriority(properties) {
 }
 
 /**
- * Get job market data for a country with database caching (Cost-Efficient)
- * @param {string} countryCode - Country code
- * @returns {Promise} Job market data
+ * Get real AI/tech job-market data for a country.
+ *
+ * Backed by GET /api/intelligence/:country, which aggregates real PostgreSQL
+ * job analytics + demand insights. No mock tables, no Math.random: every figure
+ * traces to measured data, and absent figures return 0 (honest) rather than a
+ * fabricated value.
+ *
+ * @param {string} countryCode - ISO 2-letter country code (e.g. "US")
+ * @returns {Promise} { success, data, cached, source, lastUpdated }
  */
 export async function getJobData(countryCode) {
+  // Qualitative demand label over a REAL measured hiring trend.
+  const demandLabel = (indicator, postings) => {
+    if (!postings) return "No Data";
+    if (indicator === "RISING") return "High";
+    if (indicator === "COOLING") return "Cooling";
+    return "Moderate";
+  };
+
   try {
-    // First, try to get cached data from database (saves API calls)
-    try {
-      const cachedResponse = await apiCall(`/api/job-cache/${countryCode}`);
-      if (cachedResponse.success && cachedResponse.data) {
-        console.log(`💼 Using cached job data for ${countryCode} (saves API costs)`);
-        return {
-          success: true,
-          data: cachedResponse.data,
-          cached: true,
-          lastUpdated: cachedResponse.data.lastUpdated
-        };
-      }
-    } catch (cacheError) {
-      console.log(`💼 Cache miss for ${countryCode}, generating fresh data`);
-    }
-    // Mock job data based on country - replace with real Jooble API integration
-    const jobData = {
-      'US': {
-        totalJobs: 4500,
-        aiJobs: 850,
-        averageSalary: 120000,
-        topCompanies: ['Google', 'Microsoft', 'Amazon', 'Meta', 'Apple'],
-        growthRate: 25,
-        demandLevel: 'Very High'
-      },
-      'CN': {
-        totalJobs: 3200,
-        aiJobs: 680,
-        averageSalary: 45000,
-        topCompanies: ['Alibaba', 'Tencent', 'Baidu', 'ByteDance', 'Huawei'],
-        growthRate: 35,
-        demandLevel: 'Very High'
-      },
-      'GB': {
-        totalJobs: 2100,
-        aiJobs: 420,
-        averageSalary: 75000,
-        topCompanies: ['DeepMind', 'ARM', 'Rolls-Royce', 'BAE Systems', 'BT'],
-        growthRate: 18,
-        demandLevel: 'High'
-      },
-      'DE': {
-        totalJobs: 1800,
-        aiJobs: 380,
-        averageSalary: 70000,
-        topCompanies: ['SAP', 'Siemens', 'BMW', 'Mercedes-Benz', 'Bosch'],
-        growthRate: 22,
-        demandLevel: 'High'
-      },
-      'JP': {
-        totalJobs: 1600,
-        aiJobs: 320,
-        averageSalary: 65000,
-        topCompanies: ['Sony', 'Toyota', 'SoftBank', 'Nintendo', 'Panasonic'],
-        growthRate: 15,
-        demandLevel: 'Moderate'
-      },
-      'KR': {
-        totalJobs: 1400,
-        aiJobs: 290,
-        averageSalary: 55000,
-        topCompanies: ['Samsung', 'LG', 'Hyundai', 'SK Hynix', 'Naver'],
-        growthRate: 28,
-        demandLevel: 'High'
-      },
-      'CA': {
-        totalJobs: 1200,
-        aiJobs: 250,
-        averageSalary: 85000,
-        topCompanies: ['Shopify', 'BlackBerry', 'Cohere', 'Element AI', 'Mila'],
-        growthRate: 20,
-        demandLevel: 'High'
-      },
-      'FR': {
-        totalJobs: 1100,
-        aiJobs: 220,
-        averageSalary: 60000,
-        topCompanies: ['Thales', 'Atos', 'Dassault', 'Orange', 'Criteo'],
-        growthRate: 16,
-        demandLevel: 'Moderate'
-      },
-      'IN': {
-        totalJobs: 2800,
-        aiJobs: 560,
-        averageSalary: 25000,
-        topCompanies: ['Infosys', 'TCS', 'Wipro', 'HCL', 'Tech Mahindra'],
-        growthRate: 40,
-        demandLevel: 'Very High'
-      },
-      'BR': {
-        totalJobs: 900,
-        aiJobs: 180,
-        averageSalary: 35000,
-        topCompanies: ['Petrobras', 'Vale', 'Itaú', 'Banco do Brasil', 'Embraer'],
-        growthRate: 30,
-        demandLevel: 'Growing'
-      }
+    const cc = (countryCode || "").toString();
+    const intel = await apiCall(`/api/intelligence/${encodeURIComponent(cc)}`);
+
+    const jm = intel?.jobMarket || {};
+    const salary = intel?.salaryStats || {};
+    const last7d = Number(jm.postingsLast7d) || 0;
+    const last30d = Number(jm.postingsLast30d) || 0;
+
+    // Real momentum %: extrapolate the last 7d to a 30d run-rate vs the actual
+    // 30d total. 0 when there is no 30d baseline (never negative, never faked).
+    const growthRate =
+      last30d > 0
+        ? Math.max(0, Math.round(((last7d * (30 / 7) - last30d) / last30d) * 100))
+        : 0;
+
+    const data = {
+      totalJobs: Number(jm.techJobs) || 0,
+      aiJobs: Number(jm.aiJobs) || 0,
+      averageSalary: Number(salary.median ?? salary.average) || 0,
+      salaryCurrency: salary.currency || null,
+      growthRate,
+      demandLevel: demandLabel(jm.jobGrowthIndicator, Number(jm.techJobs) || 0),
+      topCompanies: Array.isArray(intel?.aiCompanies) ? intel.aiCompanies : [],
+      topAIJobs: Array.isArray(jm.topAIJobs) ? jm.topAIJobs : [],
+      postingsLast7d: last7d,
+      postingsLast30d: last30d,
+      degraded: !!intel?.degraded,
     };
 
-    const countryData = jobData[countryCode?.toUpperCase()] || {
-      totalJobs: Math.floor(Math.random() * 1000) + 500,
-      aiJobs: Math.floor(Math.random() * 200) + 100,
-      averageSalary: Math.floor(Math.random() * 50000) + 40000,
-      topCompanies: ['TechCorp', 'InnovateLab', 'AI Solutions', 'DataTech', 'FutureSoft'],
-      growthRate: Math.floor(Math.random() * 20) + 10,
-      demandLevel: 'Moderate'
-    };
-
-    // Add some fun randomization to make it more dynamic
-    const funMultiplier = 0.8 + Math.random() * 0.4; // 0.8 to 1.2 multiplier
-    countryData.totalJobs = Math.floor(countryData.totalJobs * funMultiplier);
-    countryData.aiJobs = Math.floor(countryData.aiJobs * funMultiplier);
-    countryData.averageSalary = Math.floor(countryData.averageSalary * funMultiplier);
-    
-    // Add fun job titles
-    const funJobTitles = [
-      'AI Wizard 🧙‍♂️', 'Data Sorcerer 🔮', 'Machine Learning Ninja 🥷',
-      'Quantum Developer 🌌', 'Neural Network Architect 🧠', 'AI Ethics Guardian 🛡️',
-      'Robotics Engineer 🤖', 'Computer Vision Specialist 👁️', 'NLP Engineer 💬',
-      'Deep Learning Researcher 🔬', 'AI Product Manager 📊', 'MLOps Engineer ⚙️'
-    ];
-    
-    countryData.funJobTitles = funJobTitles.slice(0, 5);
-    countryData.marketVibes = [
-      '🔥 Hot Market!', '🚀 Booming!', '💎 Premium Opportunities', 
-      '⚡ High Energy', '🌟 Stellar Growth', '🎯 Target Rich'
-    ][Math.floor(Math.random() * 6)];
-    
-    // Simulate API delay with some randomness for realism
-    await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 400));
-    
-    // Store in cache for future use (saves API costs)
-    try {
-      await apiCall(`/api/job-cache/${countryCode}`, {
-        method: 'POST',
-        body: JSON.stringify(countryData)
-      });
-      console.log(`💼 Fresh job data cached for ${countryCode}`);
-    } catch (cacheError) {
-      console.warn(`⚠️ Failed to cache job data for ${countryCode}:`, cacheError.message);
-    }
-    
     return {
       success: true,
-      data: countryData,
+      data,
       cached: false,
-      lastUpdated: new Date().toISOString()
+      source: "intelligence",
+      lastUpdated: intel?.generatedAt || new Date().toISOString(),
     };
   } catch (error) {
-    console.error('❌ Job data fetch failed:', error);
-    throw error;
+    console.error("❌ Job data fetch failed:", error);
+    return { success: false, error: error.message };
   }
 }
 
@@ -353,81 +240,6 @@ export async function getWikipediaSummary(countryName) {
       extract: 'Cultural information temporarily unavailable.',
       title: countryName,
       thumbnail: null
-    };
-  }
-}
-
-/**
- * Get detailed place information using Geoapify
- * @param {string} placeId - Geoapify place ID
- * @returns {Promise} Detailed place data
- */
-export async function getPlaceDetails(placeId) {
-  try {
-    const url = `https://api.geoapify.com/v2/place-details?id=${placeId}&apiKey=${GEOAPIFY_KEY}`;
-    console.log('🔍 Fetching place details:', url);
-    
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Place details API error: ${response.status}`);
-    
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('❌ Place details fetch failed:', error);
-    throw error;
-  }
-}
-
-/**
- * Real Jooble API integration (requires API key)
- * @param {string} countryCode - Country code
- * @param {string} keywords - Job search keywords
- * @returns {Promise} Real job data from Jooble
- */
-export async function getJoobleJobs(countryCode, keywords = 'artificial intelligence') {
-  try {
-    // Note: Jooble API requires server-side integration due to CORS
-    // This is a placeholder for the real implementation
-    const joobleApiKey = 'YOUR_JOOBLE_API_KEY'; // You'll need to get this from Jooble
-    
-    // Map country codes to Jooble country parameters
-    const joobleCountries = {
-      'US': 'us', 'CN': 'cn', 'GB': 'uk', 'DE': 'de', 'JP': 'jp',
-      'KR': 'kr', 'CA': 'ca', 'FR': 'fr', 'IN': 'in', 'BR': 'br'
-    };
-    
-    const joobleCountry = joobleCountries[countryCode] || 'us';
-    
-    // For now, return enhanced mock data that simulates Jooble response
-    console.log(`💼 Simulating Jooble API for ${countryCode} with keywords: ${keywords}`);
-    
-    const mockJoobleResponse = {
-      totalCount: Math.floor(Math.random() * 5000) + 1000,
-      jobs: Array.from({ length: 10 }, (_, i) => ({
-        title: [
-          'Senior AI Engineer', 'Machine Learning Scientist', 'Data Scientist',
-          'AI Research Engineer', 'Deep Learning Engineer', 'Computer Vision Engineer',
-          'NLP Engineer', 'AI Product Manager', 'Robotics Engineer', 'MLOps Engineer'
-        ][i],
-        company: `TechCorp ${i + 1}`,
-        location: `${countryName} City`,
-        salary: `$${Math.floor(Math.random() * 100000) + 80000}`,
-        link: `https://example.com/job/${i + 1}`,
-        snippet: `Exciting ${keywords} opportunity in ${countryName}...`
-      }))
-    };
-    
-    return {
-      success: true,
-      data: mockJoobleResponse,
-      source: 'jooble_simulation'
-    };
-    
-  } catch (error) {
-    console.error('❌ Jooble API error:', error);
-    return {
-      success: false,
-      error: error.message
     };
   }
 }
